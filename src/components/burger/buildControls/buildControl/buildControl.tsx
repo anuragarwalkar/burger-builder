@@ -6,14 +6,15 @@ export interface BuildControlProps {
     type: string;
     moreClicked: any;
     lessClicked: any;
+    disabled:any
 }
  
-const BuildControl: React.SFC<BuildControlProps> = (props: any) => {
+const BuildControl: React.SFC<BuildControlProps> = ({label, lessClicked, moreClicked, type, disabled}: any) => {
     return ( <div className={styles.buildControl}>
-        <div className={styles.label}>{props.label}</div>
+        <div className={styles.label}>{label}</div>
         <div className={styles.customButtons}>
-        <button className={styles.less} onClick={() => props.lessClicked(props.type)}>Less</button>
-        <button className={styles.more} onClick={() => props.moreClicked(props.type)}>More</button>
+        <button className={styles.less} onClick={() => lessClicked(type)} disabled={disabled}>Less</button>
+        <button className={styles.more} onClick={() => moreClicked(type)}>More</button>
         </div>
     </div> );
 }

@@ -14,7 +14,7 @@ const Burger = (props: any) => {
         transformedIngredients = <p>Please start adding ingredients</p>
     }
     return (
-        <div className={styles.burger}>
+        <div className={styles.Burger}>
             <BurgerIngredient type="bread-top"></BurgerIngredient>
             {transformedIngredients}
             <BurgerIngredient type="bread-bottom"></BurgerIngredient>

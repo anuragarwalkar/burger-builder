@@ -22,8 +22,8 @@ class BurgerIngedient extends React.Component<Props, State> {
         case 'bread-top':
             ingredients = (
                 <div className={styles.BreadTop}>
-                    <div className={styles.seed1}></div>
-                    <div className={styles.seed2}></div>
+                    <div className={styles.Seeds1}></div>
+                    <div className={styles.Seeds2}></div>
                 </div>
             )
             break
