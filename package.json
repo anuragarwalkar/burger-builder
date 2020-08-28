@@ -37,6 +37,9 @@
       "last 1 safari version"
     ]
   },
+  "keywords": [
+    "react"
+  ],
   "engines": {
     "node": "10"
   }
