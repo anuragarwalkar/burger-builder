@@ -3,7 +3,7 @@ import styles from './modal.module.css';
 import Backdrop from '../Backdrop/Backdrop';
 
 export interface ModalProps {
-    show: any,
+    show: boolean,
     hide: any
 }
 
