@@ -1,9 +1,6 @@
 import React from 'react';
-import Layout from './components/layouts/layout';
-import BurgerBuilder from './containers/burgerBuilder/burgerBuilder';
-// import logo from './logo.svg';
-// import appStyle from './App.module.css';
-
+import Layout from './hoc/layouts/layout';
+import BurgerBuilder from './Containers/burgerBuilder/burgerBuilder';
 
 function App() {
   return (

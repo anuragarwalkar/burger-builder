@@ -72,7 +72,7 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
 
     hideModal = () => this.setState({ purchasing: false});
     purchase = () => alert('you can purchase')
-    
+
     render() {
         const disabledInfo = { ...this.state.ingredients }
 
