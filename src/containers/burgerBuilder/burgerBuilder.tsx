@@ -65,6 +65,13 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
         await this.setState({ ingredients, totalPrice });
         this.updatePurchaseState();
     }
+
+    purchaseHandler = () => {
+        this.setState({ purchasing: true });
+    }
+
+    hideModal = () => this.setState({ purchasing: false});
+    purchase = () => alert('you can purchase')
     render() {
         const disabledInfo = { ...this.state.ingredients }
 
@@ -74,18 +81,20 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
 
         return (
             <Aux>
-                {this.state.purchasing &&
-                    <Modal>
-                        <OrderSummary ingredients={this.state.ingredients} />
-                    </Modal>
-                }
+               
+                <Modal show={this.state.purchasing} hide={this.hideModal}>
+                    <OrderSummary ingredients={this.state.ingredients} price={this.state.totalPrice} prurchase={this.purchase} hide={this.hideModal}/>
+                </Modal>
+
                 <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls
                     moreClicked={this.addIngredientHandler}
                     lessClicked={this.removeIngredientHandler}
                     disabled={disabledInfo}
                     totalPrice={this.state.totalPrice}
-                    purchasable={!this.state.purchasable}>
+                    purchasable={!this.state.purchasable}
+                    orderNow={this.purchaseHandler}
+                    >
                 </BuildControls>
             </Aux>
         );
