@@ -13,7 +13,7 @@ export interface ModalState {
 
 class Modal extends React.Component<ModalProps, ModalState> {
     shouldComponentUpdate(nextProps: any, nextState: any) {
-        return this.props.show !== nextProps.show
+        return this.props.show !== nextProps.show || nextProps.children !== this.props.children
     }
 
     render() {

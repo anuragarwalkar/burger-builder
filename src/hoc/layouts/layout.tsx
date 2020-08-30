@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import Aux from '../customAux';
+import React, { useState, Fragment } from 'react';
 import styles from './layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
@@ -12,13 +11,13 @@ const Layout = (props: any) => {
         setSideDrawer(cond);
     }
 
-    return <Aux>
+    return <Fragment>
         <Toolbar show={() => sideDrawerHandler(true)}/>
         <SideDrawer open={showSideDrawer} closed={() => sideDrawerHandler(false)}/>
         <main className={styles.content}>
             {props.children}
         </main>
-    </Aux>
+    </Fragment>
 }
 
 export default Layout;

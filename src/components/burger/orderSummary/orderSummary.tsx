@@ -3,8 +3,9 @@ import Button from '../../UI/Button/Button';
 
 const OrderSummary = ({ingredients, hide, prurchase, price}: any) => {
     useEffect(() => {
-        console.log('s')
+
     })
+    
     const ingredientSummary = Object.keys(ingredients)
     .map(key => {
     return <li key={key}><span style={{ textTransform: 'capitalize'}}>
