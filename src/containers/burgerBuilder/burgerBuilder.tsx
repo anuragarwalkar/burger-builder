@@ -32,7 +32,6 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
     }
 
     async componentDidMount() {
-        console.log('b')
         try {
             const {data: ingredients} = await axios.get('/ingredients.json');
             this.setState({ingredients});
@@ -97,8 +96,8 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
         }
 
         const result = await axios.post('/orders', order)
+        console.log('result:', result)
         this.setState({ loading: false, purchasing: false });
-        console.log('result:', result);
     }
 
     render() {
