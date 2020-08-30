@@ -95,7 +95,7 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
             deliveryMethod: 'fastest'
         }
 
-        const result = await axios.post('/orders', order)
+        const result = await axios.post('/orders.json', order)
         console.log('result:', result)
         this.setState({ loading: false, purchasing: false });
     }
