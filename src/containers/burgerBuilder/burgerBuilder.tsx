@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import Burger from '../../components/burger/burger';
-import BuildControls from '../../components/burger/buildControls/buildControls';
+import Burger from '../../components/Burger/burger';
+import BuildControls from '../../components/Burger/BuildControls/BuildControl';
 import Modal from '../../components/UI/Modal/modal';
-import OrderSummary from '../../components/burger/orderSummary/orderSummary';
 import axios from '../../axiosOrder';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 export interface BurderBuilderProps {
 
