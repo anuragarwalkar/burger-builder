@@ -1,9 +1,11 @@
-import React from 'react';
-import Aux from '../../hoc/customAux';
-import Burger from '../../components/burger/burger';
-import BuildControls from '../../components/burger/buildControls/buildControls';
+import React, { Fragment } from 'react';
+import Burger from '../../components/Burger/burger';
+import BuildControls from '../../components/Burger/BuildControls/BuildControl';
 import Modal from '../../components/UI/Modal/modal';
-import OrderSummary from '../../components/burger/orderSummary/orderSummary';
+import axios from '../../axiosOrder';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 export interface BurderBuilderProps {
 
@@ -22,15 +24,20 @@ const INGREDIENT_PRICES: any = {
 
 class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderState> {
     state: any = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         totalPrice: 4,
         purchasable: false,
-        purchasing: false
+        purchasing: false,
+        loading: false
+    }
+
+    async componentDidMount() {
+        try {
+            const {data: ingredients} = await axios.get('/ingredients.json');
+            this.setState({ingredients});
+        } catch (error) {
+            
+        }
     }
 
     updatePurchaseState() {
@@ -70,8 +77,29 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
         this.setState({ purchasing: true });
     }
 
-    hideModal = () => this.setState({ purchasing: false});
-    purchase = () => alert('you can purchase')
+    hideModal = () => {
+        this.setState({ purchasing: false });
+    }
+
+    purchase = async () => {
+        this.setState({ loading: true });
+        const { ingredients, totalPrice: price } = this.state;
+
+        const order = {
+            ingredients, price,
+            customer: {
+                name: 'Anurag Arwalkar',
+                address: 'Deccan',
+                email: 'anuragarwalkar@gmail.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+
+        const result = await axios.post('/orders.json', order)
+        console.log('result:', result)
+        this.setState({ loading: false, purchasing: false });
+    }
+
     render() {
         const disabledInfo = { ...this.state.ingredients }
 
@@ -79,13 +107,12 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
 
-        return (
-            <Aux>
-               
-                <Modal show={this.state.purchasing} hide={this.hideModal}>
-                    <OrderSummary ingredients={this.state.ingredients} price={this.state.totalPrice} prurchase={this.purchase} hide={this.hideModal}/>
-                </Modal>
+        let orderSummary = null;
 
+        let burger = <Spinner />;
+
+        if (this.state.ingredients) {
+            burger = (<Fragment>
                 <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls
                     moreClicked={this.addIngredientHandler}
@@ -94,11 +121,27 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
                     totalPrice={this.state.totalPrice}
                     purchasable={!this.state.purchasable}
                     orderNow={this.purchaseHandler}
-                    >
+                >
                 </BuildControls>
-            </Aux>
+            </Fragment>)
+
+            orderSummary = <OrderSummary ingredients={this.state.ingredients}
+            price={this.state.totalPrice} prurchase={this.purchase} hide={this.hideModal} />;
+            
+        }
+
+        if (this.state.loading) orderSummary = <Spinner />;
+
+        return (
+            <Fragment>
+                <Modal show={this.state.purchasing}
+                    hide={this.hideModal}>
+                    {orderSummary}
+                </Modal>
+                {burger}
+            </Fragment>
         );
     }
 }
 
-export default BurderBuilder;
+export default withErrorHandler(BurderBuilder, axios);

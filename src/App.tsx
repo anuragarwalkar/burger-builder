@@ -1,15 +1,20 @@
 import React from 'react';
-import Layout from './components/layouts/layout';
-import BurgerBuilder from './containers/burgerBuilder/burgerBuilder';
-// import logo from './logo.svg';
-// import appStyle from './App.module.css';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Layout from './hoc/Layouts/layout';
+import BurgerCheckout from './containers/BurgerCheckout/BurgerCheckout';
+import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
 
 function App() {
   return (
+    <BrowserRouter>
       <Layout>
-        <BurgerBuilder></BurgerBuilder>
+        <Switch>
+        <Route path='/' exact component={BurgerBuilder}></Route>
+        <Route path='/checkout' component={BurgerCheckout}></Route>
+        </Switch>
       </Layout>
+    </BrowserRouter>
   );
 }
 

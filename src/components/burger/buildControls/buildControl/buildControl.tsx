@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './buildControl.module.css';
+import styles from './BuildControl.module.css';
 
 export interface BuildControlProps {
     label: string;
