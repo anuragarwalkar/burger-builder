@@ -73,7 +73,7 @@
   },
   "scripts": {
     "start": "serve -s build",
-    "build": "node scripts/build.js",
+    "build": "export CI=false && node scripts/test.js && node scripts/build.js",
     "test": "node scripts/test.js",
     "win-dev": "set PORT=3001 && node scripts/start.js",
     "dev": "export PORT=3001 && node scripts/start.js"
