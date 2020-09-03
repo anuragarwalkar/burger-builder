@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import styles from './layout.module.css';
-import Toolbar from '../../components/Navigation/Toolbar';
-import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
+import Toolbar from '../../components/navigation/toolbar';
+import SideDrawer from '../../components/navigation/sideDrawer/sideDrawer';
 
 const Layout = (props: any) => {
 

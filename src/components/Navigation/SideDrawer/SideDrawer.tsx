@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import Logo from '../../Logo/Logo';
-import NavigationItems from '../NavigationItems/NavigationItems';
+import Logo from '../../logo/Logo';
+import NavigationItems from '../navigationItems/navigationItems';
 import classes from './SideDrawer.module.css';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 

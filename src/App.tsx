@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Layout from './hoc/layouts/layout';
-import BurgerBuilder from './containers/BurgerBuilder/burgerBuilder';
-import BurgerCheckout from './containers/BurgerCheckout/BurgerCheckout';
+import BurgerBuilder from './containers/burgerBuilder/burgerBuilder';
+import BurgerCheckout from './containers/burgerCheckout/burgerCheckout';
 
 
 function App() {
