@@ -1,10 +1,7 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import Button from '../../UI/Button/Button';
 
 const OrderSummary = ({ingredients, hide, prurchase, price}: any) => {
-    useEffect(() => {
-
-    })
     
     const ingredientSummary = Object.keys(ingredients)
     .map(key => {
