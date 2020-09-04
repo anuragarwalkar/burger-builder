@@ -8,7 +8,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import OrderSummary from '../../components/burger/orderSummary/orderSummary';
 
 export interface BurderBuilderProps {
-
+    history: any
 }
 
 export interface BurderBuilderState {
@@ -82,22 +82,20 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
     }
 
     purchase = async () => {
-        this.setState({ loading: true });
-        const { ingredients, totalPrice: price } = this.state;
+        const ingredients = {...this.state.ingredients};
 
-        const order = {
-            ingredients, price,
-            customer: {
-                name: 'Anurag Arwalkar',
-                address: 'Deccan',
-                email: 'anuragarwalkar@gmail.com'
-            },
-            deliveryMethod: 'fastest'
+        const search = [];
+
+        for(const key in this.state.ingredients) {
+            if(ingredients[key] > 0) {
+                const firstChar: string = search.length === 0 ? '?' : '&';
+                search.push(`${firstChar}${key}=${ingredients[key]}`)
+            }
         }
 
-        const result = await axios.post('/orders.json', order)
-        console.log('result:', result)
-        this.setState({ loading: false, purchasing: false });
+        search.push(`&price=${this.state.totalPrice}`);
+
+        this.props.history.push({pathname: '/checkout', search: search.join('')});
     }
 
     render() {
