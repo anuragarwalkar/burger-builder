@@ -5,6 +5,7 @@ import axios from '../../../axiosOrder';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import { withRouter } from 'react-router-dom';
 import Input from '../../../components/UI/Input/Input';
+import checkoutForm from './checkoutForm';
 
 export interface CheckoutDataProps {
     ingredients: any
@@ -12,46 +13,69 @@ export interface CheckoutDataProps {
 
 const CheckoutData = (props: any) => {
 
-    const [form] = useState({
-        name: '', email: '', address: {
-            street: '',
-            postalCode: ''
-        }
-    });
+    const [form, setForm]: any = useState(checkoutForm);
+
+    const inputChangeHandler = async (event: any, inputName: string) => {
+        const value = event.target.value;
+        setForm((oldState: any) => ({
+            ...oldState,
+            [inputName]: {
+                ...oldState[inputName],
+                value
+            }
+        }))
+    }
 
     const [loading, setLoading] = useState(false);
 
-    const onClick = async (event: any) => {
+    const onOrder = async (event: any) => {
+        debugger
         event.preventDefault();
         setLoading(true);
 
         const { ingredients, price = 0 } = props;
 
+        const customer: any = {};
+
+        for(const key in form) {
+            if(key !== 'deliveryMethod')
+            customer[key] =  form[key].value;
+        }
+
+        const deliveryMethod = form.deliveryMethod.value;
+
         const order = {
             ingredients, price,
-            customer: {
-                name: '',
-                address: '',
-                email: ''
-            },
-            deliveryMethod: 'fastest'
+            customer, deliveryMethod
         }
 
         const result = await axios.post('/orders.json', order)
-        console.log('result:', result)
+
+        if (result)
+            props.history.push('');
         setLoading(false);
-        props.history.push('');
+    }
+    const formElements: any = [];
+
+    for (const key in form) {
+        formElements.push({
+            id: key,
+            config: form[key]
+        });
     }
 
     let inputForm = null;
 
-    inputForm = <form>
-        <Input inputtype="input" label="Name" type="text" name="name" placeholder="Your name" />
-        <Input inputtype="input" label="Email" type="email" name="email" placeholder="Your email" />
-        <Input inputtype="input" label="Street" type="text" name="street" placeholder="Your street" />
-        <Input inputtype="input" label="Postal Code" type="text" name="postal" placeholder="Your postal code" />
+    inputForm = <form onSubmit={onOrder}>
+        {formElements.map((element: any) => (
+            <Input changed={(event) => inputChangeHandler(event, element.id)} elementType={element.config.elementType}
+                elementConfig={element.config.elementConfig}
+                value={element.config.value}
+                key={element.id}
+            />
+        ))}
 
-        <Button btnType="Success" click={onClick}>Order</Button>
+        <Button btnType="Success">Order</Button>
     </form>;
 
     if (loading) {
