@@ -4,7 +4,7 @@ import BurgerIngredient from './burgerIngredient/burgerIngredient';
 
 const Burger = (props: any) => {
     let transformedIngredients: any = Object.keys(props.ingredients).map(igKey => {
-        return [...Array(props.ingredients[igKey])].map((_, i) => {
+        return [...Array(Math.floor(props.ingredients[igKey]))].map((_, i) => {
             return <BurgerIngredient key={igKey + i} type={igKey}></BurgerIngredient>
         })
     }).reduce((array, el)=> {
