@@ -29,7 +29,6 @@ const CheckoutData = (props: any) => {
     const [loading, setLoading] = useState(false);
 
     const onOrder = async (event: any) => {
-        debugger
         event.preventDefault();
         setLoading(true);
 
