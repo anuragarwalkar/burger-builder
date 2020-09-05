@@ -28,3 +28,8 @@
 
 }
 
+.invalid {
+    border: 1px solid red;
+    background-color: #FDa494;
+}
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Button from '../../../components/UI/Button/Button';
 import classes from './checkoutData.module.css';
 import axios from '../../../axiosOrder';
@@ -13,33 +13,84 @@ export interface CheckoutDataProps {
 
 const CheckoutData = (props: any) => {
 
+    const unmounted = useRef(false);
+
     const [form, setForm]: any = useState(checkoutForm);
 
+    const [formIsValid, setFormIsValid] = useState(false);
+
+    useEffect(() => {
+        return () => {
+            unmounted.current = true;
+        }
+    })
+
+    type rulesType = { required: boolean, minLength: number, maxLength: number };
+
+    const checkValidity = (value: string, rules: rulesType): boolean => {
+        let isValid = true;
+
+        if (rules.required) {
+            isValid = value.trim() !== '' && isValid;
+        }
+
+        if (rules.maxLength) {
+            isValid = value.length <= rules.maxLength && isValid;
+        }
+
+        if (rules.minLength) {
+            isValid = value.length >= rules.minLength && isValid;
+        }
+
+        return isValid;
+    }
+
     const inputChangeHandler = async (event: any, inputName: string) => {
-        const value = event.target.value;
-        setForm((oldState: any) => ({
-            ...oldState,
-            [inputName]: {
-                ...oldState[inputName],
-                value
+        const value: string = event.target.value;
+        const validation = form[inputName].validation;
+        const valid: boolean = validation ? checkValidity(value, validation) : true;
+        let newState: any = {};
+
+        setForm((oldState: any) => {
+            newState = {
+                ...oldState,
+                [inputName]: {
+                    ...oldState[inputName],
+                    value, valid, touched: true
+                }
             }
-        }))
+
+            let isValid = true;
+
+            for (const key in newState) {
+                if (!newState[key].valid) {
+                    isValid = false
+                    break
+                }
+            }
+
+            setFormIsValid(isValid);
+            return newState;
+
+        })
+
+
     }
 
     const [loading, setLoading] = useState(false);
 
     const onOrder = async (event: any) => {
-        debugger
         event.preventDefault();
+        if (!formIsValid) return;
         setLoading(true);
 
         const { ingredients, price = 0 } = props;
 
         const customer: any = {};
 
-        for(const key in form) {
-            if(key !== 'deliveryMethod')
-            customer[key] =  form[key].value;
+        for (const key in form) {
+            if (key !== 'deliveryMethod')
+                customer[key] = form[key].value;
         }
 
         const deliveryMethod = form.deliveryMethod.value;
@@ -51,9 +102,9 @@ const CheckoutData = (props: any) => {
 
         const result = await axios.post('/orders.json', order)
 
-        if (result)
-            props.history.push('');
+        if (result && !unmounted.current)
         setLoading(false);
+        props.history.push('');
     }
     const formElements: any = [];
 
@@ -68,14 +119,18 @@ const CheckoutData = (props: any) => {
 
     inputForm = <form onSubmit={onOrder}>
         {formElements.map((element: any) => (
-            <Input changed={(event) => inputChangeHandler(event, element.id)} elementType={element.config.elementType}
+            <Input changed={(event) => inputChangeHandler(event, element.id)}
+                elementType={element.config.elementType}
+                invalid={!element.config.valid}
                 elementConfig={element.config.elementConfig}
+                shouldValidate={element.config.validation}
                 value={element.config.value}
+                touched={element.config.touched}
                 key={element.id}
             />
         ))}
 
-        <Button btnType="Success">Order</Button>
+        <Button disabled={!formIsValid} btnType="Success">Order</Button>
     </form>;
 
     if (loading) {

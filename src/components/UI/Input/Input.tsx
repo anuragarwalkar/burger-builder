@@ -14,31 +14,40 @@ export interface InputProps {
         ]
 
     },
-    changed: (event: any) => void ,
-    value: string
+    changed: (event: any) => void,
+    value: string,
+    invalid: boolean,
+    shouldValidate: boolean,
+    touched: boolean
 }
 
 const Input: React.SFC<InputProps> = (props) => {
     let inputElement = null;
 
+    const inputClasses = [classes.inputElement];
+
+    if (props.invalid && props.shouldValidate && props.touched) {
+        inputClasses.push(classes.invalid)
+    }
+
     switch (props.elementType) {
         case 'input':
-            inputElement = <input className={classes.inputElement}
+            inputElement = <input className={inputClasses.join(' ')}
                 {...props.elementConfig} value={props.value} onChange={props.changed} />
             break;
         case 'textarea':
-            inputElement = <textarea className={classes.inputElement}
-                {...props.elementConfig} value={props.value} onChange={props.changed}/>
+            inputElement = <textarea className={inputClasses.join(' ')}
+                {...props.elementConfig} value={props.value} onChange={props.changed} />
             break;
         case 'select':
-            inputElement = <select className={classes.inputElement} onChange={props.changed}>
+            inputElement = <select className={inputClasses.join(' ')} onChange={props.changed}>
                 {props.elementConfig.options.map((item) => (
                     <option key={item.value} value={item.value}>{item.displayValue}</option>
                 ))}
             </select>
             break;
         default:
-            inputElement = <input className={classes.inputElement}
+            inputElement = <input className={inputClasses.join(' ')}
                 {...props.elementConfig} value={props.value} onChange={props.changed} />
     }
 

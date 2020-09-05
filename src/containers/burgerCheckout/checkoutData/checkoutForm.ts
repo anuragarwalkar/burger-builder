@@ -5,21 +5,36 @@ export default {
             type: 'text',
             placeholder: 'Your Name'
         },
-        value: ''
+        value: '',
+        validation : {
+            required: true
+        },
+        valid: false,
+        touched: false
     }, email: {
         elementType: 'input',
         elementConfig: {
             type: 'email',
             placeholder: 'Your Email'
         },
-        value: ''
+        value: '',
+        validation : {
+            required: true
+        },
+        valid: false,
+        touched: false
     }, street: {
         elementType: 'input',
         elementConfig: {
             type: 'text',
             placeholder: 'Your Street'
         },
-        value: ''
+        value: '',
+        validation : {
+            required: true
+        },
+        valid: false,
+        touched: false
     },
     postalCode: {
         elementType: 'input',
@@ -27,7 +42,12 @@ export default {
             type: 'number',
             placeholder: 'Your Postal Code'
         },
-        value: 0
+        value: 0,
+        validation : {
+            required: true
+        },
+        valid: false,
+        touched: false
     },
     country: {
         elementType: 'input',
@@ -35,8 +55,14 @@ export default {
             type: 'text',
             placeholder: 'Your Country'
         },
-        value: ''
-
+        value: '',
+        validation : {
+            required: true,
+            minLength: 4,
+            maxLength: 6
+        },
+        valid: false,
+        touched: false
     },
     deliveryMethod: {
         elementType: 'select',
@@ -46,6 +72,8 @@ export default {
                 { value: 'checpest', displayValue: 'Checpest' },
             ]
         },
-        value:'fastest'
+        value:'fastest',
+        valid: true,
+        touched: false
     }
 }
