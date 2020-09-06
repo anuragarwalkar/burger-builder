@@ -1,36 +1,38 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Route, withRouter, Redirect } from 'react-router-dom';
 import CheckoutSummary from '../../components/order/checkoutSummary/checkOutSummary';
 import CheckoutData from './checkoutData/checkoutData';
-import queryString from 'query-string';
-import _ from 'lodash';
+import { connect } from 'react-redux';
+import { RootState } from '../../models/rootState.model';
+import { Ingredients } from '../../models/ingredient.model';
 
 export interface BurgerCheckoutProps {
-
+    ingredients: Ingredients;
+    totalPrice: number;
+    match: { path: string };
+    purchased: boolean
 }
 
-const BurgerCheckout: React.SFC<BurgerCheckoutProps> = ({ location: { search }, match: { path } }: any) => {
-    const options = { parseNumbers: true };
+const BurgerCheckout: React.SFC<any> = ({ ingredients, purchased, match: { path } }) => {
 
-    const [parsed]: any = useState(queryString.parse(search, options));
+    let purchaseRedirect = <Fragment>
+        <CheckoutSummary ingredients={ingredients} />
+        <Route path={`${path}/contact-data`}
+            exact component={CheckoutData}
+        />
+    </Fragment>;
 
-    const [ingredients, setIngredients] = useState({});
-    const [price, setPrice] = useState(0);
+    if (purchased) {
+        purchaseRedirect = <Redirect to="/" />;
+    }
 
-    useEffect(() => {
-        setIngredients(_.omit(parsed, 'price'));
-        setPrice(parsed.price);
-    }, [parsed]);
-
-    return (
-        <Fragment>
-            <CheckoutSummary ingredients={ingredients} />
-            <Route path={`${path}/contact-data`}
-                exact render={
-                    () => (<CheckoutData ingredients={ingredients} price={price} />)
-                } />
-        </Fragment>
-    );
+    return (purchaseRedirect);
 }
 
-export default withRouter(BurgerCheckout);
+const mapStateToProps = (state: RootState) => {
+    const { ingredients, totalPrice } = state.burgerBuilder;
+    const { purchased } = state.order;
+    return { ingredients, totalPrice, purchased }
+}
+
+export default connect(mapStateToProps)(withRouter(BurgerCheckout));
