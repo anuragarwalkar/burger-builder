@@ -6,9 +6,15 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import { withRouter } from 'react-router-dom';
 import Input from '../../../components/UI/Input/Input';
 import checkoutForm from './checkoutForm';
+import { Order } from '../../../models/order.model';
+import WithErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import { connect } from 'react-redux';
+import { purchaseBurger } from '../../../store/actions/index';
+import { RootState } from '../../../models/rootState.model';
+import { Ingredients } from '../../../models/ingredient.model';
 
 export interface CheckoutDataProps {
-    ingredients: any
+    ingredients: Ingredients
 }
 
 const CheckoutData = (props: any) => {
@@ -77,12 +83,9 @@ const CheckoutData = (props: any) => {
 
     }
 
-    const [loading, setLoading] = useState(false);
-
     const onOrder = async (event: any) => {
         event.preventDefault();
         if (!formIsValid) return;
-        setLoading(true);
 
         const { ingredients, price = 0 } = props;
 
@@ -95,16 +98,13 @@ const CheckoutData = (props: any) => {
 
         const deliveryMethod = form.deliveryMethod.value;
 
-        const order = {
+        const order: Order = {
             ingredients, price,
             customer, deliveryMethod
         }
 
-        const result = await axios.post('/orders.json', order)
 
-        if (result && !unmounted.current)
-        setLoading(false);
-        props.history.push('');
+        props.onOrderBurger(order);
     }
     const formElements: any = [];
 
@@ -133,7 +133,7 @@ const CheckoutData = (props: any) => {
         <Button disabled={!formIsValid} btnType="Success">Order</Button>
     </form>;
 
-    if (loading) {
+    if (props.loading) {
         inputForm = <Spinner />;
     }
 
@@ -144,4 +144,19 @@ const CheckoutData = (props: any) => {
         </div>);
 }
 
-export default withRouter(CheckoutData);
+const mapStateToProps = (state: RootState) => {
+    const { ingredients, totalPrice: price } = state.burgerBuilder;
+    const { loading } = state.order;
+    return {
+        ingredients,
+        price,
+        loading
+    }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        onOrderBurger: (orderData: Order) => dispatch(purchaseBurger(orderData))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(WithErrorHandler(CheckoutData, axios)));

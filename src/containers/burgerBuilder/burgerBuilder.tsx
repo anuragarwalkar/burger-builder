@@ -6,71 +6,51 @@ import axios from '../../axiosOrder';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import OrderSummary from '../../components/burger/orderSummary/orderSummary';
+import { connect } from 'react-redux';
+import { Ingredients, IngredientType } from '../../models/ingredient.model';
+import { RootState } from '../../models/rootState.model';
+import * as actions from '../../store/actions/index';
+import { purchaseInit } from '../../store/actions/orders';
 
 export interface BurderBuilderProps {
-    history: any
+    history: any;
+    ingredients: Ingredients;
+    totalPrice: number;
+    addIngredient: (ingredients: IngredientType) => void;
+    removeIngredient: (ingredients: IngredientType) => void;
+    fetchIngredients: () => void;
+    onPurchaseInit: () => void;
 }
 
 export interface BurderBuilderState {
-
-}
-
-const INGREDIENT_PRICES: any = {
-    salad: 0.5,
-    cheese: 0.4,
-    meat: 1.3,
-    bacon: 0.7
+    purchasable: boolean;
+    purchasing: boolean;
 }
 
 class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderState> {
-    state: any = {
-        ingredients: null,
-        totalPrice: 4,
+    state = {
         purchasable: false,
         purchasing: false,
-        loading: false
     }
 
     async componentDidMount() {
-        try {
-            const {data: ingredients} = await axios.get('/ingredients.json');
-            this.setState({ingredients});
-        } catch (error) {
-            
-        }
+        this.props.fetchIngredients();
     }
 
-    updatePurchaseState() {
-        const ingredients = {
-            ...this.state.ingredients
-        }
+    updatePurchaseState(ingredients: any) {
         const sum = Object.keys(ingredients)
-            .map(key => ingredients[key])
+            .map((key: string) => ingredients[key])
             .reduce((sum, el) => sum + el, 0)
 
-        this.setState({ purchasable: sum > 0 })
+        return sum > 0;
     }
 
-    addIngredientHandler = async (type: string) => {
-        const oldCount = this.state.ingredients[type];
-        const updatedCount = oldCount + 1;
-        const ingredients = { ...this.state.ingredients, [type]: updatedCount };
-        const priceAddition = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const totalPrice = oldPrice + priceAddition;
-        await this.setState({ ingredients, totalPrice });
-        this.updatePurchaseState();
+    addIngredientHandler = async (type: IngredientType) => {
+        this.props.addIngredient(type);
     }
 
-    removeIngredientHandler = async (type: string) => {
-        const oldCount = this.state.ingredients[type];
-        const updatedCount = oldCount === 0 ? 0 : oldCount - 1;
-        const ingredients = { ...this.state.ingredients, [type]: updatedCount };
-        const priceDeducted = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const totalPrice = oldPrice - priceDeducted;
-        await this.setState({ ingredients, totalPrice });
-        this.updatePurchaseState();
+    removeIngredientHandler = async (type: IngredientType) => {
+        this.props.removeIngredient(type);
     }
 
     purchaseHandler = () => {
@@ -82,24 +62,12 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
     }
 
     purchase = async () => {
-        const ingredients = {...this.state.ingredients};
-
-        const search = [];
-
-        for(const key in this.state.ingredients) {
-            if(ingredients[key] > 0) {
-                const firstChar: string = search.length === 0 ? '?' : '&';
-                search.push(`${firstChar}${key}=${ingredients[key]}`)
-            }
-        }
-
-        search.push(`&price=${this.state.totalPrice}`);
-
-        this.props.history.push({pathname: '/checkout', search: search.join('')});
+        this.props.onPurchaseInit();
+        this.props.history.push({ pathname: '/checkout' });
     }
 
     render() {
-        const disabledInfo = { ...this.state.ingredients }
+        const disabledInfo: any = { ...this.props.ingredients }
 
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0;
@@ -109,26 +77,24 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
 
         let burger = <Spinner />;
 
-        if (this.state.ingredients) {
+        if (this.props.ingredients) {
             burger = (<Fragment>
-                <Burger ingredients={this.state.ingredients}></Burger>
+                <Burger ingredients={this.props.ingredients}></Burger>
                 <BuildControls
                     moreClicked={this.addIngredientHandler}
                     lessClicked={this.removeIngredientHandler}
                     disabled={disabledInfo}
-                    totalPrice={this.state.totalPrice}
-                    purchasable={!this.state.purchasable}
+                    totalPrice={this.props.totalPrice}
+                    purchasable={!this.updatePurchaseState(this.props.ingredients)}
                     orderNow={this.purchaseHandler}
                 >
                 </BuildControls>
             </Fragment>)
 
-            orderSummary = <OrderSummary ingredients={this.state.ingredients}
-            price={this.state.totalPrice} prurchase={this.purchase} hide={this.hideModal} />;
-            
-        }
+            orderSummary = <OrderSummary ingredients={this.props.ingredients}
+                price={this.props.totalPrice} prurchase={this.purchase} hide={this.hideModal} />;
 
-        if (this.state.loading) orderSummary = <Spinner />;
+        }
 
         return (
             <Fragment>
@@ -142,4 +108,20 @@ class BurderBuilder extends React.Component<BurderBuilderProps, BurderBuilderSta
     }
 }
 
-export default withErrorHandler(BurderBuilder, axios);
+const mapStateToProps = (state: RootState) => {
+    const { ingredients, totalPrice } = state.burgerBuilder;
+    return {
+        ingredients, totalPrice
+    }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        addIngredient: (ingredientName: IngredientType) => dispatch(actions.addIngredient(ingredientName)),
+        removeIngredient: (ingredientName: IngredientType) => dispatch(actions.removeIngredient(ingredientName)),
+        fetchIngredients: () => dispatch(actions.fetchIngredients()),
+        onPurchaseInit: () => dispatch(purchaseInit())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurderBuilder, axios));
