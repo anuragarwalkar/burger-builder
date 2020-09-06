@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import classes from './order.module.css';
+import { Ingredients } from '../../models/ingredient.model';
 
 export interface OrderProps {
     ingredients: any;
@@ -24,7 +25,7 @@ const Order: React.SFC<OrderProps> = ({ price, ingredients: ingredientObj }) => 
 
     }, [ingredientObj]);
 
-    const spanStyle:any = {
+    const spanStyle: any = {
         textTransform: 'capitalize',
         display: 'inline-block',
         margin: '0 8px',
@@ -38,7 +39,7 @@ const Order: React.SFC<OrderProps> = ({ price, ingredients: ingredientObj }) => 
     return (
         <div className={classes.order}>
             <p>Ingredients: {getAllIngredients}</p>
-            <p>Price <strong>USD {price.toFixed(2)}</strong></p>
+            <p>Price <strong>USD {price}</strong></p>
         </div>
     );
 }
