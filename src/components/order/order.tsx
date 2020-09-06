@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import classes from './order.module.css';
-import { Ingredients } from '../../models/ingredient.model';
 
 export interface OrderProps {
     ingredients: any;
