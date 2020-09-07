@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { purchaseBurger } from '../../../store/actions/index';
 import { RootState } from '../../../models/rootState.model';
 import { Ingredients } from '../../../models/ingredient.model';
+import { convertFormToArray, checkValidity } from '../../../utils/functions';
 
 export interface CheckoutDataProps {
     ingredients: Ingredients
@@ -30,26 +31,6 @@ const CheckoutData = (props: any) => {
             unmounted.current = true;
         }
     })
-
-    type rulesType = { required: boolean, minLength: number, maxLength: number };
-
-    const checkValidity = (value: string, rules: rulesType): boolean => {
-        let isValid = true;
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-
-        return isValid;
-    }
 
     const inputChangeHandler = async (event: any, inputName: string) => {
         const value: string = event.target.value;
@@ -89,31 +70,21 @@ const CheckoutData = (props: any) => {
 
         const { ingredients, price = 0 } = props;
 
-        const customer: any = {};
+        const orderData: any = {};
 
         for (const key in form) {
-            if (key !== 'deliveryMethod')
-                customer[key] = form[key].value;
+            orderData[key] = form[key].value;
         }
-
-        const deliveryMethod = form.deliveryMethod.value;
 
         const order: Order = {
             ingredients, price,
-            customer, deliveryMethod
+            orderData, userId: props.userId 
         }
 
 
         props.onOrderBurger(order);
     }
-    const formElements: any = [];
-
-    for (const key in form) {
-        formElements.push({
-            id: key,
-            config: form[key]
-        });
-    }
+    const formElements: any = convertFormToArray(form);
 
     let inputForm = null;
 
@@ -147,10 +118,12 @@ const CheckoutData = (props: any) => {
 const mapStateToProps = (state: RootState) => {
     const { ingredients, totalPrice: price } = state.burgerBuilder;
     const { loading } = state.order;
+    const { userId } = state.auth;
     return {
         ingredients,
         price,
-        loading
+        loading,
+        userId
     }
 }
 

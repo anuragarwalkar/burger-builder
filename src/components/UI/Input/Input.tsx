@@ -33,7 +33,7 @@ const Input: React.SFC<InputProps> = (props) => {
     switch (props.elementType) {
         case 'input':
             inputElement = <input className={inputClasses.join(' ')}
-                {...props.elementConfig} value={props.value} onChange={props.changed} />
+                {...props.elementConfig} autoComplete="on" value={props.value} onChange={props.changed} />
             break;
         case 'textarea':
             inputElement = <textarea className={inputClasses.join(' ')}
