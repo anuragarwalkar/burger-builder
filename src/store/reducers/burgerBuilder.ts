@@ -10,7 +10,8 @@ const initialState: BurgerBuilderState = {
         meat: 0,
         bacon: 0
     },
-    totalPrice: 4
+    totalPrice: 4,
+    building: false
 }
 
 type actionType = { type: string, payload: { ingredientName: IngredientType, ingredients : Ingredients} };
@@ -23,7 +24,7 @@ const INGREDIENT_PRICES: Ingredients = {
 }
 
 const addOrRemoveIngredient = (action: actionType, state: BurgerBuilderState) => {
-    const newState = cloneState(state);
+    const newState:BurgerBuilderState = cloneState(state);
     const isActionTypeAdd = action.type === ADD_INGREDIENTS;
 
     const { ingredientName } = action.payload;
@@ -34,6 +35,7 @@ const addOrRemoveIngredient = (action: actionType, state: BurgerBuilderState) =>
     newState.totalPrice = parseFloat((finalPrice).toFixed(2));
     const totalIngredient = isActionTypeAdd ? oldValue + 1 : oldValue - 1; 
     newState.ingredients[ingredientName] =  totalIngredient; 
+    newState.building = true;
 
     return newState;
 }
@@ -42,6 +44,7 @@ const setIngredients = (action:actionType, state: BurgerBuilderState) => {
     const newState:BurgerBuilderState = cloneState(state);
     newState.ingredients = action.payload.ingredients;
     newState.totalPrice = initialState.totalPrice;
+    newState.building = false;
     return newState
 }
 

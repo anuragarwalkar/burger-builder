@@ -28,10 +28,15 @@ export const purchaseBurgerStart = () => {
 }
 
 export const purchaseBurger = (order: Order) => {
-    return async (dispatch: any) => {
+    return async (dispatch: any, getState: any) => {
         dispatch(purchaseBurgerStart());
-        const {data} = await axios.post('/orders.json', order);
-        dispatch(purchaseBurgerSuccess(data.name, order));
+        const { token } = getState().auth;
+        const result = await axios.post(`/orders.json?auth=${token}`, order);
+        
+        if(result) {
+            const { data } = result;
+            dispatch(purchaseBurgerSuccess(data.name, order));
+        }
     }
 }
 
@@ -50,9 +55,10 @@ export const fetchOrdersSuccess = (orders: Order[]) => {
     }
 }
 
-export const fetchORdersFailed = () => {
+export const fetchOrdersFailed = (error: string) => {
     return {
-        type: FETCH_ORDERS_FAILED
+        type: FETCH_ORDERS_FAILED,
+        payload: {error: {message: error}}
     }
 }
 
@@ -63,20 +69,24 @@ export const fetchOrdersInit = () => {
 }
 
 export const fetchOrders = () => {
-    return async (dispatch: any) => {
+    return async (dispatch: any, getState: any) => {
         try {
             dispatch(fetchOrdersInit());
-            const { data } = await axios.get('/orders.json');
-
-            const orders = [];
+            const { token, userId } = getState().auth;
+            const query = `auth=${token}&orderBy="userId"&equalTo="${userId}"`
+            let result = await axios.get(`/orders.json?${query}`);
+            if(result != null) {
+                const { data } = result;
+                const orders = [];
+        
+                for (const key in data) {
+                    orders.push({...data[key], id: key});
+                }
     
-            for (const key in data) {
-                orders.push({...data[key], id: key});
+                dispatch(fetchOrdersSuccess(orders));
             }
-
-            dispatch(fetchOrdersSuccess(orders));
         } catch (error) {
-            
+            dispatch(fetchOrdersFailed(error.response.data.error))
         }
     }
 }

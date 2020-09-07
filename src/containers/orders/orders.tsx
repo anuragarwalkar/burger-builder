@@ -13,11 +13,11 @@ export interface OrdersProps {
 }
 
 const Orders: React.SFC<OrdersProps> = ({ orders, loading, fetchOrders }: any) => {
-
+    
     useEffect(() => {
-        if (orders.length === 0)
-            fetchOrders()
-    }, [fetchOrders, orders])
+        fetchOrders()
+        // eslint-disable-next-line 
+    }, [])
 
     let ordersShow = <Spinner />
 
@@ -34,9 +34,9 @@ const Orders: React.SFC<OrdersProps> = ({ orders, loading, fetchOrders }: any) =
 }
 
 const mapStateToProps = (state: RootState) => {
-    const { orders, loading } = state.order;
+    const { orders, loading, error } = state.order;
     return {
-        orders, loading
+        orders, loading, error
     }
 }
 

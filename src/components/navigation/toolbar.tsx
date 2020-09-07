@@ -4,14 +4,14 @@ import Logo from '../logo/Logo';
 import NavigationItems from './navigationItems/navigationItems';
 import DrawerToggler from './sideDrawer/drawerToggler/drawerToggler';
 
-const Toolbar = ({show}: any) => (
+const Toolbar = ({show, isAuthenticated}: any) => (
     <header className={styles.Toolbar}>
         <DrawerToggler show={show}/>
         <div className={styles.Logo}>
             <Logo />
         </div>
         <nav className={styles.DesktopOnly}>
-            <NavigationItems />
+            <NavigationItems isAuthenticated={isAuthenticated} />
         </nav>
     </header>
 );

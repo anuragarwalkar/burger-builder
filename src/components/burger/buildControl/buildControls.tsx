@@ -9,7 +9,8 @@ const controls = [
     { label: 'Meat', type: 'meat' }
 ]
 
-const BuildControls = ({ moreClicked, lessClicked, disabled, totalPrice, purchasable, orderNow }: any) => {
+const BuildControls = ({ moreClicked, lessClicked, disabled, totalPrice, 
+    purchasable, orderNow, isAuth }: any) => {
     return (
         <div className={styles.buildControls}>
             <p>Current Price <strong>${totalPrice}</strong></p>
@@ -20,7 +21,7 @@ const BuildControls = ({ moreClicked, lessClicked, disabled, totalPrice, purchas
                 type={type}
                 disabled={disabled[type]}
                 key={label}></BuildControl>)}
-            <button className={styles.OrderButton} disabled={purchasable} onClick={orderNow}>Order Now</button>
+            <button className={styles.OrderButton} disabled={purchasable} onClick={orderNow}>{isAuth ? 'Order Now' : 'Sign In To Order'}</button>
         </div>
     )
 }

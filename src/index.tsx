@@ -1,41 +1,53 @@
-import React, { StrictMode } from 'react';
-import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import burgerBuilder from './store/reducers/burgerBuilder';
-import order from './store/reducers/order';
-import thunk from 'redux-thunk';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import './index.css';
+import React, { StrictMode } from "react";
+import ReactDOM from "react-dom";
+import { createStore, applyMiddleware, compose, combineReducers } from "redux";
+import { Provider } from "react-redux";
+import burgerBuilder from "./store/reducers/burgerBuilder";
+import order from "./store/reducers/order";
+import thunk from "redux-thunk";
+import App from "./App";
+import auth from "./store/reducers/auth";
+import * as serviceWorker from "./serviceWorker";
+import "./index.css";
 
 declare global {
-    interface Window {
-        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-    }
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+  }
 }
 
-const logger = (store: any) => {
-    return (next: any) => {
-        return (action: any) => {
-            console.log('action:', action)
-            return next(action);
-        }
-    }
-}
+const logger = () => {
+  return (next: any) => {
+    return (action: any) => {
+      // console.log("action:", action);
+      return next(action);
+    };
+  };
+};
 
 const middlwares = [logger, thunk];
+const reducers = { burgerBuilder, order, auth };
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const reduxDevTools: any = (process.env.NODE_ENV === 'development') ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
-const rootReducer = combineReducers({ burgerBuilder, order });
+const composeEnhancers = reduxDevTools;
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middlwares)));
+const rootReducer = combineReducers({ ...reducers });
 
-const wrappedApp = <StrictMode> <Provider store={store}><App />
-</Provider></StrictMode>;
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(...middlwares))
+);
 
-const rootElement = document.getElementById('root');
+const wrappedApp = (
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>
+);
+
+const rootElement = document.getElementById("root");
 
 ReactDOM.render(wrappedApp, rootElement);
 
