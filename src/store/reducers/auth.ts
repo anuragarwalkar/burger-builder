@@ -3,7 +3,7 @@ import { AUTH_INIT, AUTH_SUCCESS, AUTH_FAILED, AUTH_LOGOUT, SET_AUTH_REDIRECT_PA
 import { updateObject } from "../../utils/functions";
 import { FirebaseError } from "../../models/firebaseError.model";
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
     loading: false,
     token: '',
     userId: '',

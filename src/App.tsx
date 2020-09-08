@@ -20,7 +20,7 @@ const absoluteCenter = {height:'80vh', display:'flex', alignItems:'center'};
 
 const FullHWSpinner = () => <div style={absoluteCenter}><Spinner /></div>;
 
-const App: FunctionComponent<AppProps> = ({ isAuth }) => {
+export const App: FunctionComponent<AppProps> = ({ isAuth }) => {
   const routeGuard = (Component: any) => {
     return isAuth ? <Component /> : <Redirect to="/" />;
   };

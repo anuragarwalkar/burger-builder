@@ -13,7 +13,7 @@ import * as actions from "../../store/actions/index";
 import { purchaseInit } from "../../store/actions/orders";
 import { setAuthRedirectPath } from "../../store/actions/index";
 
-export interface BurderBuilderProps {
+export interface BurgerBuilderProps {
   history: any;
   ingredients: Ingredients;
   totalPrice: number;
@@ -25,14 +25,14 @@ export interface BurderBuilderProps {
   isAuth: boolean;
 }
 
-export interface BurderBuilderState {
+export interface BurgerBuilderState {
   purchasable: boolean;
   purchasing: boolean;
 }
 
-class BurderBuilder extends React.Component<
-  BurderBuilderProps,
-  BurderBuilderState
+export class BurgerBuilder extends React.Component<
+  BurgerBuilderProps,
+  BurgerBuilderState
 > {
   state = {
     purchasable: false,
@@ -150,4 +150,4 @@ const mapDispatchToProps = (dispatch: any) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withErrorHandler(BurderBuilder, axios));
+)(withErrorHandler(BurgerBuilder, axios));
