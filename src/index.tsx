@@ -4,11 +4,12 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import burgerBuilder from "./store/reducers/burgerBuilder";
 import order from "./store/reducers/order";
-import thunk from "redux-thunk";
+import createSagaMiddlware from 'redux-saga';
 import App from "./App";
 import auth from "./store/reducers/auth";
 import * as serviceWorker from "./serviceWorker";
 import "./index.css";
+import {watchAuth, watchBurgerBuilder, watchOrders} from './store/sagas/index';
 
 declare global {
   interface Window {
@@ -25,7 +26,9 @@ const logger = () => {
   };
 };
 
-const middlwares = [logger, thunk];
+const sagaMiddlware = createSagaMiddlware()
+
+const middlwares = [logger, sagaMiddlware];
 const reducers = { burgerBuilder, order, auth };
 
 const reduxDevTools: any = (process.env.NODE_ENV === 'development') ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
@@ -38,6 +41,10 @@ const store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(...middlwares))
 );
+
+sagaMiddlware.run(watchAuth);
+sagaMiddlware.run(watchBurgerBuilder);
+sagaMiddlware.run(watchOrders);
 
 const wrappedApp = (
   <StrictMode>

@@ -1,6 +1,5 @@
 import { IngredientType, Ingredients } from "../../models/ingredient.model";
-import { ADD_INGREDIENTS, REMOVE_INGREDIENTS, SET_INGREDIENTS } from "./actionsTypes";
-import axios from '../../axiosOrder';
+import { ADD_INGREDIENTS, REMOVE_INGREDIENTS, SET_INGREDIENTS, INIT_INGREDIENTS } from "./actionsTypes";
 
 
 export const addIngredient = (ingredientName: IngredientType) => {
@@ -16,12 +15,5 @@ export const setIngredients = (ingredients: Ingredients) => {
 }
 
 export const fetchIngredients = () => {
-    return async (dispatch: any) => {
-        try {
-            const { data: ingredients } = await axios.get('/ingredients.json');
-            dispatch(setIngredients(ingredients))
-        } catch (error) {
-            
-        }
-    }
+    return { type: INIT_INGREDIENTS }
 }
