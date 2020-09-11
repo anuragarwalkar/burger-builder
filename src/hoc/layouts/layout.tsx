@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from 'react';
 import styles from './layout.module.css';
 import Toolbar from '../../components/navigation/toolbar';
-import SideDrawer from '../../components/navigation/sideDrawer/sideDrawer';
 import { RootState } from '../../models/rootState.model';
 import { connect } from 'react-redux';
+import SideDrawer from '../../components/navigation/SideDrawer/sideDrawer';
 
 const Layout = (props: any) => {
 

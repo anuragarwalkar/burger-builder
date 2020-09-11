@@ -4,7 +4,6 @@ import BuildControls from "../../components/burger/buildControl/buildControls";
 import Modal from "../../components/UI/Modal/modal";
 import axios from "../../axiosOrder";
 import Spinner from "../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import OrderSummary from "../../components/burger/orderSummary/orderSummary";
 import { connect } from "react-redux";
 import { Ingredients, IngredientType } from "../../models/ingredient.model";
@@ -12,6 +11,7 @@ import { RootState } from "../../models/rootState.model";
 import * as actions from "../../store/actions/index";
 import { purchaseInit } from "../../store/actions/orders";
 import { setAuthRedirectPath } from "../../store/actions/index";
+import withErrorHandler from '../../hoc/WithErrorHandler/withErrorHandler'
 
 export interface BurgerBuilderProps {
   history: any;

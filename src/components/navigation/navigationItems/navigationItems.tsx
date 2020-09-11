@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./navigationItems.module.css";
-import NavigationItem from "./navigationItem/navigationItem";
+import NavigationItem from "./NavigationItem/navigationItem";
 
 const NavigationItems = ({ isAuthenticated }: any) => {
   return (

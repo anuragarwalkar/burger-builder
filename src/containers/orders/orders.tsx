@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import Order from '../../components/order/order';
 import axios from '../../axiosOrder';
-import WithErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import WithErrorHandler from '../../hoc/WithErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import { Order as OrderType } from '../../models/order.model';
 import { connect } from 'react-redux';

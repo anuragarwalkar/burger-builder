@@ -8,7 +8,7 @@ import Spinner from "./components/UI/Spinner/Spinner";
 
 // Lazy Imports
 const Orders = lazy(() => import("./containers/orders/orders"));
-const BurgerCheckout = lazy(() => import("./containers/burgerCheckout/burgerCheckout"));
+const BurgerCheckout = lazy(() => import("./containers/BurgerCheckout/burgerCheckout"));
 const Logout = lazy(() => import("./containers/auth/logout/logout"));
 const Auth = lazy(() => import('./containers/auth/auth'));
 

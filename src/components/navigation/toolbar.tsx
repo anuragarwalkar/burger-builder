@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './toolbar.module.css';
-import Logo from '../logo/Logo';
 import NavigationItems from './navigationItems/navigationItems';
-import DrawerToggler from './sideDrawer/drawerToggler/drawerToggler';
+import DrawerToggler from './SideDrawer/drawerToggler/drawerToggler';
+import Logo from '../logo/logo';
 
 const Toolbar = ({show, isAuthenticated}: any) => (
     <header className={styles.Toolbar}>
