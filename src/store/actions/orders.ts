@@ -58,6 +58,7 @@ export const fetchOrdersInit = () => {
     }
 }
 
+// Removed API_KEY
 export const fetchOrders = () => {
     return {
         type: FETCH_ORDERS

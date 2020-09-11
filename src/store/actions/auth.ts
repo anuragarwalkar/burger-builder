@@ -28,6 +28,7 @@ export const setAuthRedirectPath = (path: string) => {
     }
 }
 
+// Removed API_KEY
 export const auth = (email: string, password: string, method: 'signUp' | 'signIn') => {
     return { type: AUTH_USER, email, password, method }
 }
