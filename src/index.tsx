@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import burgerBuilder from "./store/reducers/burgerBuilder";
 import order from "./store/reducers/order";
 import createSagaMiddlware from 'redux-saga';
-import App from "./App";
+import App from "./app";
 import auth from "./store/reducers/auth";
 import * as serviceWorker from "./serviceWorker";
 import "./index.css";
