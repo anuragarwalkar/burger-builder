@@ -11,7 +11,7 @@ import { RootState } from "../../models/rootState.model";
 import * as actions from "../../store/actions/index";
 import { purchaseInit } from "../../store/actions/orders";
 import { setAuthRedirectPath } from "../../store/actions/index";
-import withErrorHandler from '../../hoc/WithErrorHandler/withErrorHandler'
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 
 export interface BurgerBuilderProps {
   history: any;

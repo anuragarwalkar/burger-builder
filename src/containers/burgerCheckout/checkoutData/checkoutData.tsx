@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import Input from '../../../components/UI/Input/Input';
 import checkoutForm from './checkoutForm';
 import { Order } from '../../../models/order.model';
-import WithErrorHandler from '../../../hoc/WithErrorHandler/withErrorHandler';
+import WithErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import { connect } from 'react-redux';
 import { purchaseBurger } from '../../../store/actions/index';
 import { RootState } from '../../../models/rootState.model';
