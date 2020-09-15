@@ -1,8 +1,8 @@
 import React from "react";
 import classes from "./navigationItems.module.css";
-import NavigationItem from "./NavigationItem/navigationItem";
+import NavigationItem from "./navigationItem/navigationItem";
 
-const NavigationItems = ({ isAuthenticated }: any) => {
+const NavigationItems = ({ isAuthenticated }: {isAuthenticated: boolean}) => {
   return (
     <ul className={classes.NavigationItems}>
       <NavigationItem link="/">Burger Builder</NavigationItem>

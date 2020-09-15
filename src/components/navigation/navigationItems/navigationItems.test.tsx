@@ -10,7 +10,12 @@ describe("<NavigationItems />", () => {
   let wrapper: ShallowWrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<NavigationItems />);
+    wrapper = shallow(<NavigationItems isAuthenticated={false} />);
+  });
+
+  it("should render <NavigationItems /> Component", () => {
+    const wrapper: ShallowWrapper = shallow(<NavigationItems isAuthenticated={false} />);
+    expect(wrapper).toMatchSnapshot();
   });
 
   it("It should render two <NavigationItem /> if user is not authenticated", () => {
