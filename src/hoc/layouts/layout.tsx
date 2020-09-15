@@ -3,7 +3,7 @@ import styles from './layout.module.css';
 import Toolbar from '../../components/navigation/toolbar';
 import { RootState } from '../../models/rootState.model';
 import { connect } from 'react-redux';
-import SideDrawer from '../../components/navigation/SideDrawer/sideDrawer';
+import SideDrawer from '../../components/navigation/sideDrawer/sideDrawer';
 
 const Layout = (props: any) => {
 
