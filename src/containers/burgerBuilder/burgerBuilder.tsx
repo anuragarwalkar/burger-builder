@@ -25,7 +25,7 @@ export interface BurgerBuilderProps {
   isAuth: boolean;
 }
 
-const BurgerBuilder: FunctionComponent<BurgerBuilderProps> = (props) => {
+export const BurgerBuilder: FunctionComponent<BurgerBuilderProps> = (props) => {
   const [purchasing, setPurchasing] = useState(false);
 
   const dispatch = useDispatch();
@@ -125,4 +125,4 @@ const BurgerBuilder: FunctionComponent<BurgerBuilderProps> = (props) => {
   );
 };
 
-export default (withErrorHandler(BurgerBuilder, axios));
+export default withErrorHandler(BurgerBuilder, axios);
