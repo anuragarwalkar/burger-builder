@@ -1,6 +1,6 @@
-# Burger builder Using React With Redux And Firebase
+# Burger builder Using React With Redux Saga And Firebase
 
-# Hosted On Firebase with Continuous Intigration And Continuous Deployment Using GitHub Actions
+## Hosted On Firebase with Continuous Intigration And Continuous Deployment Using GitHub Actions
 Live Preview 👋 https://react-burger-builder-2540d.web.app/
 
 ![image](https://user-images.githubusercontent.com/40962778/94051664-7a5dbd80-fdf5-11ea-9857-28a91610ff35.png)
