@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent, useCallback, useEffect, useState } from "react";
 import Burger from "../../components/burger/burger";
 import BuildControls from "../../components/burger/buildControl/buildControls";
 import Modal from "../../components/UI/Modal/modal";
@@ -11,7 +11,7 @@ import { RootState } from "../../models/rootState.model";
 import * as actions from "../../store/actions/index";
 import { purchaseInit } from "../../store/actions/orders";
 import { setAuthRedirectPath } from "../../store/actions/index";
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 
 export interface BurgerBuilderProps {
   history: any;
@@ -21,109 +21,101 @@ export interface BurgerBuilderProps {
   removeIngredient: (ingredients: IngredientType) => void;
   fetchIngredients: () => void;
   onPurchaseInit: () => void;
-  onSetRedirectPath: (path:string) => void
+  onSetRedirectPath: (path: string) => void;
   isAuth: boolean;
 }
 
-export interface BurgerBuilderState {
-  purchasable: boolean;
-  purchasing: boolean;
-}
+const BurgerBuilder: FunctionComponent<BurgerBuilderProps> = (props) => {
+  const { fetchIngredients } = props;
+  const [purchasing, setPurchasing] = useState(false);
 
-export class BurgerBuilder extends React.Component<
-  BurgerBuilderProps,
-  BurgerBuilderState
-> {
-  state = {
-    purchasable: false,
-    purchasing: false,
-  };
+  const fetchIngredientsFromApi = useCallback(() => {
+    fetchIngredients();
+  }, [fetchIngredients]);
 
-  async componentDidMount() {
-    this.props.fetchIngredients();
-  }
+  useEffect(() => {
+    fetchIngredientsFromApi();
+  }, [fetchIngredientsFromApi]);
 
-  updatePurchaseState(ingredients: any) {
+  const updatePurchaseState = (ingredients: any) => {
     const sum = Object.keys(ingredients)
       .map((key: string) => ingredients[key])
       .reduce((sum, el) => sum + el, 0);
 
     return sum > 0;
+  };
+
+  const addIngredientHandler = async (type: IngredientType) => {
+    props.addIngredient(type);
+  };
+
+  const removeIngredientHandler = async (type: IngredientType) => {
+    props.removeIngredient(type);
+  };
+
+  const purchaseHandler = () => {
+    if (props.isAuth) {
+      setPurchasing(true);
+    } else {
+      props.onSetRedirectPath("/checkout");
+      props.history.push("/auth");
+    }
+  };
+
+  const hideModal = () => {
+    setPurchasing(false);
+  };
+
+  const purchase = async () => {
+    props.onPurchaseInit();
+    props.history.push({ pathname: "/checkout" });
+  };
+
+  const disabledInfo: any = { ...props.ingredients };
+
+  for (let key in disabledInfo) {
+    disabledInfo[key] = disabledInfo[key] <= 0;
   }
 
-  addIngredientHandler = async (type: IngredientType) => {
-    this.props.addIngredient(type);
-  };
+  let orderSummary = null;
 
-  removeIngredientHandler = async (type: IngredientType) => {
-    this.props.removeIngredient(type);
-  };
+  let burger = <Spinner />;
 
-  purchaseHandler = () => {
-      if(this.props.isAuth) {
-          this.setState({ purchasing: true });
-      }else {
-          this.props.onSetRedirectPath('/checkout');
-          this.props.history.push('/auth');
-      }
-  };
-
-  hideModal = () => {
-    this.setState({ purchasing: false });
-  };
-
-  purchase = async () => {
-    this.props.onPurchaseInit();
-    this.props.history.push({ pathname: "/checkout" });
-  };
-
-  render() {
-    const disabledInfo: any = { ...this.props.ingredients };
-
-    for (let key in disabledInfo) {
-      disabledInfo[key] = disabledInfo[key] <= 0;
-    }
-
-    let orderSummary = null;
-
-    let burger = <Spinner />;
-
-    if (this.props.ingredients) {
-      burger = (
-        <Fragment>
-          <Burger ingredients={this.props.ingredients}></Burger>
-          <BuildControls
-            moreClicked={this.addIngredientHandler}
-            lessClicked={this.removeIngredientHandler}
-            disabled={disabledInfo}
-            totalPrice={this.props.totalPrice}
-            purchasable={!this.updatePurchaseState(this.props.ingredients)}
-            orderNow={this.purchaseHandler}
-            isAuth={this.props.isAuth}>
-           </BuildControls>
-        </Fragment>
-      );
-
-      orderSummary = (
-        <OrderSummary
-          ingredients={this.props.ingredients}
-          price={this.props.totalPrice}
-          prurchase={this.purchase}
-          hide={this.hideModal}
-        />
-      );
-    }
-
-    return (
+  if (props.ingredients) {
+    burger = (
       <Fragment>
-        <Modal show={this.state.purchasing} hide={this.hideModal}>
-          {orderSummary}
-        </Modal>
-        {burger}
+        <Burger ingredients={props.ingredients}></Burger>
+        <BuildControls
+          moreClicked={addIngredientHandler}
+          lessClicked={removeIngredientHandler}
+          disabled={disabledInfo}
+          totalPrice={props.totalPrice}
+          purchasable={!updatePurchaseState(props.ingredients)}
+          orderNow={purchaseHandler}
+          isAuth={props.isAuth}
+        ></BuildControls>
       </Fragment>
     );
+
+    orderSummary = (
+      <OrderSummary
+        ingredients={props.ingredients}
+        price={props.totalPrice}
+        prurchase={purchase}
+        hide={hideModal}
+      />
+    );
   }
-}
+
+  return (
+    <Fragment>
+      <Modal show={purchasing} hide={hideModal}>
+        {orderSummary}
+      </Modal>
+      {burger}
+    </Fragment>
+  );
+};
 
 const mapStateToProps = (state: RootState) => {
   const { ingredients, totalPrice } = state.burgerBuilder;
@@ -131,7 +123,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     ingredients,
     totalPrice,
-    isAuth: token !== ''
+    isAuth: token !== "",
   };
 };
 
@@ -143,7 +135,7 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(actions.removeIngredient(ingredientName)),
     fetchIngredients: () => dispatch(actions.fetchIngredients()),
     onPurchaseInit: () => dispatch(purchaseInit()),
-    onSetRedirectPath: (path: string) => dispatch(setAuthRedirectPath(path))
+    onSetRedirectPath: (path: string) => dispatch(setAuthRedirectPath(path)),
   };
 };
 
