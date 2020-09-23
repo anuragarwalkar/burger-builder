@@ -1,15 +1,15 @@
-import React from "react";
-import { configure, mount } from "enzyme";
+// import React from "react";
+import { configure } from "enzyme";
 import ReactSixteenAdapter from "enzyme-adapter-react-16";
-import BuildControls from "../../components/burger/buildControl/buildControls";
-import { BurgerBuilder as cust } from "./burgerBuilder";
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import configureMockStore from "redux-mock-store";
+// import BuildControls from "../../components/burger/buildControl/buildControls";
+// import { BurgerBuilder as cust } from "./burgerBuilder";
+// import { Provider } from "react-redux";
+// import thunk from "redux-thunk";
+// import configureMockStore from "redux-mock-store";
 
-const mockStore = configureMockStore([thunk]);
+// const mockStore = configureMockStore([thunk]);
 
-const BurgerBuilder: any = cust;
+// const BurgerBuilder: any = cust;
 
 configure({ adapter: new ReactSixteenAdapter() });
 
@@ -20,16 +20,16 @@ jest.mock("react-redux", () => ({
 }));
 
 describe("<BurgerBuilder />", () => {
-  let wrapper: any;
+  // let wrapper: any;
 
   beforeEach(() => {});
 
   it("Should render if we provide ingredients", () => {
     // wrapper.setProps({ ingredients: { salad: 0 } });
-    const store = mockStore({
-      burgerBuilder: { ingredients: { salad: 0 } },
-      auth: { token: "invalid" },
-    });
+    // const store = mockStore({
+    //   burgerBuilder: { ingredients: { salad: 0 } },
+    //   auth: { token: "invalid" },
+    // });
 
     // wrapper = mount(
     //   <Provider store={store}>
