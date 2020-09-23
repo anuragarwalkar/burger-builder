@@ -11,7 +11,7 @@ export interface ModalProps {
 
 const shouldComponentUpdate = (prevProps: ModalProps, nextProps: ModalProps) => {
     return (
-        prevProps.show === nextProps.show ||
+        prevProps.show === nextProps.show &&
         nextProps.children === prevProps.children
     );
   };
