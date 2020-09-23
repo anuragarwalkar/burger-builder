@@ -7,7 +7,7 @@ import { purchaseBurgerSaga, ordersSaga } from './orders';
 
 export function* watchAuth () {
     yield takeEvery(AUTH_INITIATE_LOGOUT, logoutSaga);
-    yield takeEvery(AUTH_USER, authUserSaga);
+    yield takeEvery(AUTH_USER as any, authUserSaga);
 }
 
 export function* watchBurgerBuilder() {
