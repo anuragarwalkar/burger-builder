@@ -25,7 +25,7 @@ const authSuccess = (state: AuthState, action: actionType) => {
 
 const authFailed = (state: AuthState, action: actionType) => {
     const { error } = action.payload;
-    return updateObject(state, { error: error.message, loading: false })
+    return updateObject(state, { error: error.message, loading: false });
 }
 
 const authLogout = (state: AuthState) => {
