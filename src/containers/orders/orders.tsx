@@ -12,7 +12,7 @@ export interface OrdersProps {
 
 }
 
-const Orders: React.SFC<OrdersProps> = ({ orders, loading, fetchOrders }: any) => {
+const Orders: React.FC<OrdersProps> = ({ orders, loading, fetchOrders }: any) => {
     
     useEffect(() => {
         fetchOrders()
