@@ -28,15 +28,15 @@ const logger = () => {
 const middlwares = [logger, thunk];
 const reducers = { burgerBuilder, order, auth };
 
-const reduxDevTools: any = (process.env.NODE_ENV === 'development') ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
+// const reduxDevTools: any = (process.env.NODE_ENV === 'development') ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
-const composeEnhancers = reduxDevTools;
+// const composeEnhancers = reduxDevTools;
 
 const rootReducer = combineReducers({ ...reducers });
 
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(...middlwares))
+  applyMiddleware(...middlwares)
 );
 
 const wrappedApp = (
