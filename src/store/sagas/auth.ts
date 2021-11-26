@@ -14,7 +14,6 @@ const authUrl: {baseUrl: string, signUp: string, signIn: string} = {
     get signIn() {return `${this.baseUrl}signInWithPassword?key=${API_KEY}`}
 };
 
-console.log('authUrl.signIn:', authUrl.signIn)
 
 export function* authUserSaga (action: {email: string, password: string, method: 'signUp' | 'signIn'}) {
     yield put(authStart()); 
